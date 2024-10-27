@@ -1,0 +1,37 @@
+.DS_Store
+
+gray3419/cache/*
+!gray3419/cache/index.html
+
+gray3419/logs/*
+!gray3419/logs/index.html
+
+!gray3419/*/.htaccess
+
+composer.lock
+
+user_guide_src/build/*
+user_guide_src/cilexer/build/*
+user_guide_src/cilexer/dist/*
+user_guide_src/cilexer/pycilexer.egg-info/*
+
+# IDE Files
+#-------------------------
+/nbproject/
+.idea/*
+
+## Sublime Text cache files
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+/tests/tests/
+/tests/results/
+/images/
+/assets/
+/public/
+/system/
+/uploads/
+/CI_phpStorm.php
+/application/third_party
