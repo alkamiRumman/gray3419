@@ -230,8 +230,7 @@
 								<br>
 							</div>
                             <div class="form-group col-md-2">
-                                <button type="button" class="btn btn-sm btn-success add-field">Add</button>
-                                <button type="button" class="btn btn-sm btn-danger remove-field">Remove</button>
+                                <button type="button" class="btn btn-sm btn-danger remove-field"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>`;
 		$('.dynamic:last').after(fieldHTML);

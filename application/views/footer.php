@@ -1,6 +1,5 @@
 <div class="modal fade" id="remoteModal1" role="dialog" aria-hidden="true" data-backdrop="static"
 	 data-keyboard="false" style="z-index: 999999"></div>
-
 </section>
 </body>
 </html>

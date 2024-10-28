@@ -31,16 +31,8 @@
 						<tr>
 							<th>Accident Date</th>
 							<th>Accident Time</th>
-							<th>Vehicle LIC. Plate No</th>
-							<th>Vehicle VIN./Chassis No</th>
-							<th>Vehicle License Plate Class</th>
 							<th>Place/Location of Accident</th>
 							<th>Road Condition</th>
-							<th>Vehicle Owner</th>
-							<th>Driver at Time of Accident</th>
-							<th>Occupation of Driver</th>
-							<th>Insurer Name</th>
-							<th>Did This Driver Accept Liability?</th>
 							<th>Details Of Accident</th>
 							<th>Police Opinion</th>
 							<th>Create At</th>
@@ -56,7 +48,11 @@
 		</div>
 	</div>
 </div>
-
+<style>
+	#item-list {
+		cursor: pointer;
+	}
+</style>
 <script>
 	var Table = [];
 	window.onload = function () {
@@ -72,21 +68,20 @@
 					}, "targets": 0, 'sType': 'date'
 				}, {
 					"render": function (data, type, row) {
-						return moment(data).format('DD MMM YYYY hh:mm:ss A');
-					}, "targets": 14, 'sType': 'date'
+						return moment(data, "HH:mm").format('hh:mm:ss A');
+					}, "targets": 1, 'sType': 'date'
 				}, {
 					"render": function (data, type, row) {
-						if (data){
+						if (data) {
 							return moment(data).format('DD MMM YYYY hh:mm:ss A');
 						} else {
 							return '-'
 						}
-					}, "targets": 15, 'sType': 'date'
+					}, "targets": [6, 7], 'sType': 'date'
 				}
 			],
-			'aoColumns': [{mData: "accidentDate"}, {mData: "accidentTime"}, {mData: "vehicleLicPlate"}, {mData: "chassisNo"}, {mData: "licensePlateClass"}, {mData: "locationOfAccident"},
-				{mData: "roadCondition"}, {mData: "vehicleOwner"}, {mData: "driverName"}, {mData: "driverOccupation"}, {mData: "insurer"},
-				{mData: "acceptLiability"}, {mData: "accidentDetails"}, {mData: "policeOpinion"}, {mData: "createAt"}, {mData: "updateAt"}, {
+			'aoColumns': [{mData: "accidentDate"}, {mData: "accidentTime"}, {mData: "locationOfAccident"},
+				{mData: "roadCondition"}, {mData: "accidentDetails"}, {mData: "policeOpinion"}, {mData: "createAt"}, {mData: "updateAt"}, {
 					mData: "actions",
 					bSortable: false
 				}],
@@ -97,7 +92,7 @@
 				processing: '<div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading Please Wait...</span></div>'
 			},
 			'bServerSide': true,
-			'sAjaxSource': '<?= police_url('getDetails') ?>',
+			'sAjaxSource': '<?= police_url('getAccidentDetails') ?>',
 			'fnServerData': function (sSource, aoData, fnCallback) {
 				$.ajax({
 					'dataType': 'json',
@@ -145,4 +140,16 @@
 			// dom: 'lfrtip',
 		});
 	}
+
+	$('#item-list tbody').on('click', 'tr td', function () {
+		var data = $('#item-list').DataTable().row(this).data();
+		var columnIndex = $(this).index();
+		switch (columnIndex) {
+			case 8:
+				break;
+			default:
+				loadPopup('<?= police_url('viewAccidentDetails/') ?>' + data.id);
+				break;
+		}
+	});
 </script>

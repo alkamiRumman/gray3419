@@ -6,6 +6,25 @@ class Police_model extends CI_Model
 	{
 	}
 
+	function getTotalAccident()
+	{
+		$this->db->select('a.*');
+		$this->db->from(TABLE_ACCIDENTDETAILS . ' as a');
+		$this->db->join(TABLE_VEHICLEDETAILS . ' as v', 'a.id = v.accidentId');
+		$this->db->group_by('a.id');
+		return $this->db->get()->num_rows();
+	}
+
+	function getTodaysAccident()
+	{
+		$this->db->select('a.*');
+		$this->db->from(TABLE_ACCIDENTDETAILS . ' as a');
+		$this->db->join(TABLE_VEHICLEDETAILS . ' as v', 'a.id = v.accidentId');
+		$this->db->where('accidentDate', date('Y-m-d'));
+		$this->db->group_by('a.id');
+		return $this->db->get()->num_rows();
+	}
+
 	function saveAccidentDetail($arr)
 	{
 		$this->db->insert(TABLE_ACCIDENTDETAILS, $arr);
@@ -31,73 +50,23 @@ class Police_model extends CI_Model
 		return $data;
 	}
 
-	function getDetails()
+
+	function getAccidentDetailsById($id)
 	{
-		// Select all relevant fields from both tables
-		$this->db->select('a.id as accidentId, a.accidentDate, a.accidentTime, 
-                       a.locationOfAccident, a.roadCondition, 
-                       a.accidentDetails, a.policeOpinion, 
-                       u2.name as addedBy, a.createAt, a.updateAt,
-                       v.vehicleLicPlate, v.chassisNo, v.licensePlateClass, 
-                       v.vehicleOwner, v.driverName, v.driverOccupation');
-
-		$this->db->from(TABLE_ACCIDENTDETAILS . ' as a');
-		$this->db->join(TABLE_VEHICLEDETAILS . ' as v', 'a.id = v.accidentId', 'left');
-		$this->db->join(TABLE_USERS . ' as u2', 'a.userId = u2.id', 'left');
-		$this->db->where('a.policeId', getSession()->id);
-
-		$query = $this->db->get();
-		$results = $query->result();
-
-		// Initialize an array to hold accidents with their vehicles
-		$accidents = [];
-
-		// Loop through the results and structure them
-		foreach ($results as $row) {
-			$accidentId = $row->accidentId;
-
-			// If the accident ID is not already in the array, add it
-			if (!isset($accidents[$accidentId])) {
-				$accidents[$accidentId] = [
-					'accidentDate' => $row->accidentDate,
-					'accidentTime' => $row->accidentTime,
-					'locationOfAccident' => $row->locationOfAccident,
-					'roadCondition' => $row->roadCondition,
-					'accidentDetails' => $row->accidentDetails,
-					'policeOpinion' => $row->policeOpinion,
-					'addedBy' => $row->addedBy,
-					'createAt' => $row->createAt,
-					'updateAt' => $row->updateAt,
-					'vehicles' => [] // Initialize vehicles array
-				];
-			}
-
-			// Add vehicle information if it exists
-			if (!empty($row->vehicleLicPlate)) {
-				$accidents[$accidentId]['vehicles'][] = [
-					'vehicleLicPlate' => $row->vehicleLicPlate,
-					'chassisNo' => $row->chassisNo,
-					'licensePlateClass' => $row->licensePlateClass,
-					'vehicleOwner' => $row->vehicleOwner,
-					'driverName' => $row->driverName,
-					'driverOccupation' => $row->driverOccupation,
-				];
-			}
-		}
-
-		// Return the structured data
-		return array_values($accidents); // Return as a numerically indexed array
-	}
-
-
-	function getDetailrById($id)
-	{
-		$this->db->select('a.*, u.name as police, u1.name as insurer');
+		$this->db->select('a.*, u.name as police');
 		$this->db->from(TABLE_ACCIDENTDETAILS . ' as a');
 		$this->db->join(TABLE_USERS . ' as u', 'a.policeId = u.id', 'left');
-		$this->db->join(TABLE_USERS . ' as u1', 'a.insurerId = u1.id', 'left');
 		$this->db->where('a.id', $id);
 		return $this->db->get()->row();
+	}
+
+	function getVehicleDetailsByAccidentId($id)
+	{
+		$this->db->select('v.*, u1.name as insurer');
+		$this->db->from(TABLE_VEHICLEDETAILS . ' as v');
+		$this->db->join(TABLE_USERS . ' as u1', 'v.insurerId = u1.id', 'left');
+		$this->db->where('v.accidentId', $id);
+		return $this->db->get()->result();
 	}
 
 	function updateAccidentDetail($arr, $id)
