@@ -45,19 +45,22 @@ class Police extends MY_Controller
 		$arr['accidentDetails'] = $this->input->post('accidentDetails');
 		$arr['policeOpinion'] = $this->input->post('policeOpinion');
 		$arr['userId'] = getSession()->id;
+		$this->police->saveAccidentDetail($arr);
+		$accidentId = $this->db->insert_id();
 		for ($i = 0; $i < count($this->input->post('vehicleLicPlate')); $i++) {
-			$arr['vehicleLicPlate'] = $this->input->post('vehicleLicPlate')[$i];
-			$arr['chassisNo'] = $this->input->post('chassisNo')[$i];
-			$arr['licensePlateClass'] = $this->input->post('licensePlateClass')[$i];
-			$arr['vehicleOwner'] = $this->input->post('vehicleOwner')[$i];
-			$arr['driverName'] = $this->input->post('driverName')[$i];
-			$arr['driverOccupation'] = $this->input->post('driverOccupation')[$i];
+			$ar['accidentId'] = $accidentId;
+			$ar['vehicleLicPlate'] = $this->input->post('vehicleLicPlate')[$i];
+			$ar['chassisNo'] = $this->input->post('chassisNo')[$i];
+			$ar['licensePlateClass'] = $this->input->post('licensePlateClass')[$i];
+			$ar['vehicleOwner'] = $this->input->post('vehicleOwner')[$i];
+			$ar['driverName'] = $this->input->post('driverName')[$i];
+			$ar['driverOccupation'] = $this->input->post('driverOccupation')[$i];
 			if ($this->input->post('insurerId')[$i] != 0) {
-				$arr['insurerId'] = $this->input->post('insurerId')[$i];
+				$ar['insurerId'] = $this->input->post('insurerId')[$i];
 			}
-			$arr['acceptLiability'] = $this->input->post('acceptLiability')[$i];
-//			return dnp($arr);
-			$this->police->saveDetail($arr);
+			$ar['acceptLiability'] = $this->input->post('acceptLiability')[$i];
+//			return dnp($ar);
+			$this->police->saveVehicleDetail($ar);
 		}
 		$this->session->set_flashdata('success', 'Accident Details Added Successfully.');
 		redirect('police/details');
@@ -74,12 +77,13 @@ class Police extends MY_Controller
 		$action = '<a href="javascript:void(0);" onclick="loadPopup(\'' . base_url('police/editDetail/$1') . '\')" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
             <a href="deleteDetail/$1' . '" onclick="return confirm(\'Are you sure?\')" class="btn btn-sm btn-danger">
             <i class="fa fa-trash"></a>';
-		$this->datatables->select('a.id as id, a.accidentDate, a.accidentTime, a.vehicleLicPlate, a.chassisNo, a.licensePlateClass, a.locationOfAccident,
-		a.roadCondition, a.vehicleOwner, a.driverName, a.driverOccupation, a.annualPremium, a.deductible, u1.name as insurer, a.annualPremiumInsurer, a.accidentDetails, a.ownDamageDetails, 
-		a.damageDiagram, a.partialDamage, a.acceptLiability, a.policeOpinion, a.conviction, a.ownDamagePayout, a.thirdPartyPayout, a.thirdPartyBodilyPayout, a.thirdPartyDeathPayout, 
-		a.totalThirdPartyPayout, a.total, u2.name as addedBy, a.createAt, a.updateAt');
+		$this->datatables->select('a.id as id, a.accidentDate, a.accidentTime, v.vehicleLicPlate, v.chassisNo, v.licensePlateClass, a.locationOfAccident,
+		a.roadCondition, v.vehicleOwner, v.driverName, v.driverOccupation, v.annualPremium, v.deductible, u1.name as insurer, v.annualPremiumInsurer, a.accidentDetails, v.ownDamageDetails, 
+		v.damageDiagram, v.partialDamage, v.acceptLiability, a.policeOpinion, v.conviction, v.ownDamagePayout, v.thirdPartyPayout, v.thirdPartyBodilyPayout, v.thirdPartyDeathPayout, 
+		v.totalThirdPartyPayout, v.total, u2.name as addedBy, a.createAt, a.updateAt');
 		$this->datatables->from(TABLE_ACCIDENTDETAILS . ' as a');
-		$this->datatables->join(TABLE_USERS . ' as u1', 'a.insurerId = u1.id', 'left');
+		$this->datatables->join(TABLE_VEHICLEDETAILS . ' as v', 'a.id = v.accidentId');
+		$this->datatables->join(TABLE_USERS . ' as u1', 'v.insurerId = u1.id', 'left');
 		$this->datatables->join(TABLE_USERS . ' as u2', 'a.userId = u2.id', 'left');
 		$this->datatables->where(array('policeId' => getSession()->id));
 		$this->datatables->addColumn('actions', $action, 'id');

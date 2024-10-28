@@ -26,7 +26,7 @@
 			<div class="box-body">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered dtr-inline"
-						   style="width: 100% !important;" id="item-list">
+						   style="width: 99% !important;" id="item-list">
 						<thead>
 						<tr>
 							<th>Accident Date</th>
@@ -40,10 +40,11 @@
 							<th>Driver at Time of Accident</th>
 							<th>Occupation of Driver</th>
 							<th>Insurer Name</th>
-							<th>Details Of Accident</th>
 							<th>Did This Driver Accept Liability?</th>
+							<th>Details Of Accident</th>
 							<th>Police Opinion</th>
 							<th>Create At</th>
+							<th>Last Update</th>
 							<th style="padding-right: 30px">Actions</th>
 						</tr>
 						</thead>
@@ -73,11 +74,19 @@
 					"render": function (data, type, row) {
 						return moment(data).format('DD MMM YYYY hh:mm:ss A');
 					}, "targets": 14, 'sType': 'date'
+				}, {
+					"render": function (data, type, row) {
+						if (data){
+							return moment(data).format('DD MMM YYYY hh:mm:ss A');
+						} else {
+							return '-'
+						}
+					}, "targets": 15, 'sType': 'date'
 				}
 			],
 			'aoColumns': [{mData: "accidentDate"}, {mData: "accidentTime"}, {mData: "vehicleLicPlate"}, {mData: "chassisNo"}, {mData: "licensePlateClass"}, {mData: "locationOfAccident"},
-				{mData: "roadCondition"}, {mData: "vehicleOwner"}, {mData: "driverName"}, {mData: "driverOccupation"}, {mData: "insurer"}, {mData: "accidentDetails"},
-				{mData: "acceptLiability"}, {mData: "policeOpinion"}, {mData: "createAt"}, {
+				{mData: "roadCondition"}, {mData: "vehicleOwner"}, {mData: "driverName"}, {mData: "driverOccupation"}, {mData: "insurer"},
+				{mData: "acceptLiability"}, {mData: "accidentDetails"}, {mData: "policeOpinion"}, {mData: "createAt"}, {mData: "updateAt"}, {
 					mData: "actions",
 					bSortable: false
 				}],

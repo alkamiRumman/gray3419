@@ -53,7 +53,7 @@
 	<div class="col-md-12">
 		<div class="box box-primary">
 			<div class="box-header with-border">
-				<h3 class="box-title"><b>Add New</b></h3>
+				<h3 class="box-title"><b>Add Accident Details</b></h3>
 				<a href="<?= police_url('details') ?>" class="btn btn-sm btn-primary pull-right">Accident Details</a>
 			</div>
 			<form id="form" action="<?= police_url('save') ?>" method="post" enctype="multipart/form-data">
@@ -142,16 +142,16 @@
 								<option value="No">No</option>
 							</select>
 						</div>
-						<div class="form-group col-md-3">
-							<br>
-						</div>
 						<div class="form-group col-md-2">
+							<br>
 							<button type="button" class="btn btn-sm btn-danger remove-field"><i class="fa fa-trash"></i>
 							</button>
 						</div>
 					</div>
 					<hr>
-					<button type="button" class="btn btn-md btn-success add-field">Add</button>
+					<div class="form-group text-center">
+						<button type="button" class="btn btn-md btn-info add-field">Add Vehicle</button>
+					</div>
 					<div class="row">
 						<div class="form-group col-md-6">
 							<label for="accidentDetails">Details Of Accident</label>

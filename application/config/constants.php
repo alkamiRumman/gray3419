@@ -85,6 +85,7 @@ defined('EXIT__AUTO_MIN') or define('EXIT__AUTO_MIN', 9); // lowest automaticall
 defined('EXIT__AUTO_MAX') or define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 defined('TABLE_ACCIDENTDETAILS') or define('TABLE_ACCIDENTDETAILS', "accidentDetails");
+defined('TABLE_VEHICLEDETAILS') or define('TABLE_VEHICLEDETAILS', "vehicleDetails");
 defined('TABLE_USERS') or define('TABLE_USERS', "users");
 
 define('COMPANY', 'Motor Insurance Claims Database');
